@@ -10,10 +10,10 @@ import { AddValidator } from "../middlewares/AddMiddleware.js";
 import { UpdateValidate } from "../middlewares/UpdateMiddleware.js";
 const CrudRoutes = express.Router();
 
-CrudRoutes.get("/read", readData);
-CrudRoutes.post("/add", AddValidator, addData);
-CrudRoutes.put("/update/:userID", UpdateValidate, updateData);
-CrudRoutes.delete("/delete/:userID", deleteData);
-CrudRoutes.get("/singleUser/:userId", oneTimeData);
+CrudRoutes.get("/read", readData); //getting all data
+CrudRoutes.post("/add", AddValidator, addData); //adding the data
+CrudRoutes.put("/update/:userID", UpdateValidate, updateData); //updating the data
+CrudRoutes.delete("/delete/:userID", deleteData); //deleting data
+CrudRoutes.get("/singleUser/:userID", oneTimeData); //fetching the single users data
 
 export default CrudRoutes;

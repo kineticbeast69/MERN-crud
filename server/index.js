@@ -8,7 +8,7 @@ const app = express();
 
 // middlewares zone
 app.use(cors());
-
+app.use(express.json());
 mongoose //database connection is over here
   .connect(process.env.DB_URL)
   .then(() => {
@@ -20,4 +20,4 @@ mongoose //database connection is over here
     console.log("Database connected.");
   })
   .catch((err) => console.log(err));
-app.use("/api/crud", CrudRoutes);
+app.use("/crud", CrudRoutes);
