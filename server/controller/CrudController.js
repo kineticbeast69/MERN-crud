@@ -2,9 +2,9 @@ import { CrudModel } from "../model/CrudModel.js";
 import bcrypt from "bcryptjs";
 const readData = async (req, res) => {
   try {
-    const getAllData = await CrudModel.find(); //getting all the user data
+    const getAllData = await CrudModel.find().select("username email"); //getting all the user data
     if (getAllData.length == 0)
-      return res.status(404).json({ message: "No user found." });
+      return res.status(404).json({ message: "No records found." });
     return res.status(201).json({ getAllData });
   } catch (error) {
     if (error)

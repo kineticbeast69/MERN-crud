@@ -1,17 +1,69 @@
-import { data, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
+import axios from "axios";
 function UpdatePage() {
+  const navigate = useNavigate();
+  const { userID } = useParams();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const updateSubmit = (data) => {
-    console.log(data);
+
+  // fetching the single user data from server
+  useEffect(() => {
+    //getting the single user data
+    const fetchSingleUser = async () => {
+      try {
+        const response = await axios.get(
+          //api calling for single user
+          import.meta.env.VITE_BASE_URL + `/singleUser/${userID}`
+        );
+        const data = response.data.user;
+        setUsername(data.username);
+        setEmail(data.email);
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response);
+          // error toasting
+          toast.error(error.response.data.message, {
+            duration: 2000,
+            style: { color: "black", backgroundColor: "gray" },
+          });
+        }
+      }
+    };
+    fetchSingleUser();
+    return () => fetchSingleUser;
+  }, [userID]);
+
+  //function updating the data
+  const updateSubmit = async (data) => {
+    const { username, email } = data;
+    try {
+      const response = await axios.put(
+        import.meta.env.VITE_BASE_URL + `/update/${userID}`,
+        { username, email }
+      );
+      toast.success(response.data.message, {
+        duration: 2000,
+        style: { color: "white", backgroundColor: "gray" },
+      });
+      navigate("/");
+    } catch (error) {
+      if (error.response) {
+        // console.log(error.response.data);
+        toast.error(error.response.data.message, {
+          duration: 2000,
+          style: { color: "black", backgroundColor: "gray" },
+        });
+      }
+    }
   };
-  const [username, setUsername] = useState("shubham tiwari");
-  const [email, setEmail] = useState("abc.test@gamil.com");
+  const [username, setUsername] = useState(""); //username state
+  const [email, setEmail] = useState(""); //email state
   return (
     <>
       <div className="text-center text-4xl font-semibold mb-5">

@@ -1,15 +1,40 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
+import axios from "axios";
 function AddPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
-  const addSubmit = (data) => {
-    console.log(data);
+  const addSubmit = async (data) => {
+    //funtion sending the data
+    const { username, email, password } = data;
+    try {
+      const response = await axios.post(
+        //sending the data through axios
+        import.meta.env.VITE_BASE_URL + "/add",
+        { username, email, password }
+      );
+      toast.success(response.data.message, {
+        //toasting the success message
+        duration: 2000,
+        style: { color: "white", backgroundColor: "gray" },
+      });
+      navigate("/");
+    } catch (error) {
+      if (error.response) {
+        //toasting the error message
+        toast.error(error.response.data.message, {
+          duration: 2000,
+          style: { color: "white", backgroundColor: "gray" },
+        });
+      }
+    }
   };
   return (
     <>
